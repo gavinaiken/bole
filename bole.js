@@ -36,7 +36,27 @@ function levelLogger (level, name) {
       , i = 0
       , stringified
 
-    if (is.isError(inp)) {
+    if (is.isError(inp) && inp.name === 'StatusCodeError') {
+      if (arguments.length > 1)
+        out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
+
+      out.err = {
+          name    : inp.name
+        , message : inp.options && inp.options.url ? inp.message + ' for ' + inp.options.url : inp.message
+        , code    : inp.statusCode
+        , stack   : ''
+      }
+    } else if (is.isError(inp) && inp.name === 'RequestError') {
+      if (arguments.length > 1)
+        out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
+
+      out.err = {
+          name    : inp.name
+        , message : inp.options && inp.options.uri ? inp.message + ' for ' + inp.options.uri : inp.message
+        , code    : inp.error && inp.error.code ? inp.error.code : ''
+        , stack   : ''
+      }
+    } else if (is.isError(inp)) {
       if (arguments.length > 1)
         out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
 
