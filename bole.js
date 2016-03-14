@@ -17,6 +17,27 @@ function stackToString (e) {
   return s
 }
 
+function getUrl(err) {
+  if (err.options && err.options.url)
+    return err.options.url
+
+  if (err.options && err.options.uri)
+    return err.options.uri
+
+  return undefined;
+}
+
+function getMessage(err) {
+  var url, error, message
+  url = getUrl(err)
+  error = err.error && err.error.error ? err.error.error : undefined
+  message = err.message
+  if (error)
+    message += ' ' + error
+  if (url)
+    message += ' for ' + url
+  return message
+}
 
 function levelLogger (level, name) {
   return function (inp) {
@@ -42,7 +63,7 @@ function levelLogger (level, name) {
 
       out.err = {
           name    : inp.name
-        , message : inp.options && inp.options.url ? inp.message + ' for ' + inp.options.url : inp.message
+        , message : getMessage(inp)
         , code    : inp.statusCode
         , stack   : ''
       }
@@ -52,7 +73,7 @@ function levelLogger (level, name) {
 
       out.err = {
           name    : inp.name
-        , message : inp.options && inp.options.uri ? inp.message + ' for ' + inp.options.uri : inp.message
+        , message : getMessage(inp)
         , code    : inp.error && inp.error.code ? inp.error.code : ''
         , stack   : ''
       }
