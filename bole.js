@@ -34,6 +34,8 @@ function getMessage(err) {
   message = err.message
   if (error)
     message += ' ' + error
+  if (err.description)
+    message += ' ' + err.description
   if (url)
     message += ' for ' + url
   return message
@@ -57,6 +59,14 @@ function levelLogger (level, name) {
       , i = 0
       , stringified
 
+    // if called with string, error args, and error is of useless stacktrace type,
+    // then swap the args so we get the best formatting.
+    if (arguments.length > 1 && typeof inp === 'string' && isHideStackErrorType(arguments[1])) {
+      var t = arguments[0]
+      arguments[0] = arguments[1]
+      arguments[1] = t
+    }
+
     if (is.isError(inp) && inp.name === 'StatusCodeError') {
       if (arguments.length > 1)
         out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
@@ -73,6 +83,16 @@ function levelLogger (level, name) {
 
       out.err = {
           name    : inp.name
+        , message : getMessage(inp)
+        , code    : inp.error && inp.error.code ? inp.error.code : ''
+        , stack   : ''
+      }
+    } else if (is.isError(inp) && inp.type === 'TransportError') {
+      if (arguments.length > 1)
+        out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
+
+      out.err = {
+          name    : inp.type
         , message : getMessage(inp)
         , code    : inp.error && inp.error.code ? inp.error.code : ''
         , stack   : ''
@@ -123,6 +143,10 @@ function levelLogger (level, name) {
   }
 }
 
+function isHideStackErrorType(obj) {
+  return is.isError(obj) &&
+    (obj.name === 'StatusCodeError' || obj.name === 'RequestError' || obj.type === 'TransportError')
+}
 
 function bole (name) {
   function boleLogger (subname) {
