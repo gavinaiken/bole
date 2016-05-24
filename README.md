@@ -16,7 +16,7 @@ Log JSON from within Node.js applications. The log format is obviously inspired 
 
 **mymodule.js**
 ```js
-var log = require('bole')('mymodule')
+var log = require('bole-net-errors')('mymodule')
 
 module.exports.derp = function derp() {
   log.debug('W00t!')
@@ -26,7 +26,7 @@ module.exports.derp = function derp() {
 
 **main.js**
 ```js
-var bole = require('bole')
+var bole = require('bole-net-errors')
 var mod  = require('./mymodule')
 
 bole.output({
