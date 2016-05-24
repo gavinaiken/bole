@@ -1,6 +1,6 @@
 {
-  "name": "bole",
-  "version": "2.1.1",
+  "name": "bole-net-errors",
+  "version": "2.2.0",
   "description": "A tiny JSON logger",
   "main": "bole.js",
   "scripts": {
@@ -10,11 +10,11 @@
     "logging",
     "json"
   ],
-  "author": "Rod Vagg <r@va.gg> (@rvagg)",
+  "author": "Gavin Aiken <gavin@aiken.org.uk>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rvagg/bole.git"
+    "url": "https://github.com/gavinaiken/bole-net-errors.git"
   },
   "dependencies": {
     "core-util-is": ">=1.0.1 <1.1.0-0",

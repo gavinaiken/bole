@@ -1,4 +1,8 @@
-# bole
+# bole-net-errors
+
+**Forked from bole**
+
+This is just @rvagg's bole with some small tweaks to handle some error types differently. From some error types where the stack trace is effectively useless, this fork will exclude the stack from the output to make logs more readable.
 
 **A tiny JSON logger**
 
