@@ -77,7 +77,7 @@ function levelLogger (level, name) {
         , code    : inp.statusCode
         , stack   : ''
       }
-    } else if (is.isError(inp) && inp.name === 'RequestError') {
+    } else if (is.isError(inp) && (inp.name === 'RequestError' || inp.name === 'RequestTimedOutError')) {
       if (arguments.length > 1)
         out.message = format.apply(null, Array.prototype.slice.call(arguments, 1))
 
@@ -144,8 +144,12 @@ function levelLogger (level, name) {
 }
 
 function isHideStackErrorType(obj) {
-  return is.isError(obj) &&
-    (obj.name === 'StatusCodeError' || obj.name === 'RequestError' || obj.type === 'TransportError')
+  return is.isError(obj) && (
+    obj.name === 'StatusCodeError' ||
+    obj.name === 'RequestError' ||
+    obj.name === 'RequestTimedOutError' ||
+    obj.type === 'TransportError'
+  )
 }
 
 function bole (name) {
