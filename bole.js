@@ -130,6 +130,38 @@ function levelLogger (level, name) {
       out.message = format.apply(null, arguments)
     }
 
+    if (inp) {
+        if (inp.details) {
+          out.details = inp.details;
+        }
+        if (inp.statusCode) {
+          if (out.err) {
+            out.err.code = out.err.code || inp.statusCode;
+          } else if(out.req) {
+            out.req.statusCode = inp.statusCode;
+          } else {
+            out.statusCode = inp.statusCode;
+          }
+        }
+        if (inp.statusCodeDescription) {
+          if (out.err) {
+            out.err.codeDescription = inp.statusCodeDescription;
+          } else if(out.req) {
+            out.req.statusCodeDescription = out.req.statusCodeDescription || inp.statusCodeDescription;
+          } else {
+            out.statusCodeDescription = inp.statusCodeDescription;
+          }
+        }
+        if (inp.appCode) {
+            if (out.err) {
+              out.err.appCode = inp.appCode;
+            } else if(out.req) {
+              out.req.appCode = inp.appCode;
+            } else {
+              out.appCode = inp.appCode;
+            }
+        }
+    }
 
     for (; i < outputs.length; i++) {
       if (outputs[i]._writableState && outputs[i]._writableState.objectMode === true) {
